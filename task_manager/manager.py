@@ -38,11 +38,13 @@ def mark_task_done(task_id):
 
 def delete_task(task_id):
     tasks = load_tasks()
-    updated_tasks = []
 
-    for task in tasks:
-        if task["id"] != task_id:
-            updated_tasks.append(task)
+    # Remove the task with matching ID
+    updated_tasks = [task for task in tasks if task["id"] != task_id]
+
+    # Reindex IDs so they stay continuous (1, 2, 3, ...)
+    for index, task in enumerate(updated_tasks, start=1):
+        task["id"] = index
 
     save_tasks(updated_tasks)
     return updated_tasks
